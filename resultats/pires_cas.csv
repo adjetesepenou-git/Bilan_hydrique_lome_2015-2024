@@ -1,0 +1,13 @@
+"scenario","saison","sol","Ratio_moy","Ratio_min","Annee_pire","N_stress10"
+"Prudent","Avril","argileux",0.983652070804376,0.84870020351701,2015,2
+"Référence","Avril","argileux",1,1,NA,0
+"Prudent","Avril","limono_sableux",0.979679688697789,0.836870339419691,2015,2
+"Référence","Avril","limono_sableux",0.999172509530406,0.991725095304062,2015,0
+"Prudent","Avril","sableux",0.967950695974938,0.804457554025686,2015,2
+"Référence","Avril","sableux",0.988318832010094,0.915827677931979,2015,2
+"Prudent","Septembre","argileux",0.966626087425375,0.831436469423595,2017,5
+"Référence","Septembre","argileux",0.992176062539374,0.936144336632863,2017,2
+"Prudent","Septembre","limono_sableux",0.949455168301022,0.788619791971692,2017,7
+"Référence","Septembre","limono_sableux",0.98543876413818,0.894134654520843,2017,2
+"Prudent","Septembre","sableux",0.883872927341221,0.677871737726105,2017,9
+"Référence","Septembre","sableux",0.943024290268738,0.766965466747699,2017,7
