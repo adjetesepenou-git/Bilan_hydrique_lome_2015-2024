@@ -1,5 +1,7 @@
 Bilan hydrique du maïs à Lomé (Togo), 2015–2024
+
 Quand, et dans quels sols, une culture de maïs manque-t-elle d'eau à Lomé ?
+
 Première approche simplifiée, réalisée en autodidacte. Les résultats sont à interpréter avec prudence (voir Limites).
 
 Résumé 
