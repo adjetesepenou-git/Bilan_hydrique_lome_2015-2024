@@ -3,6 +3,7 @@ Quand, et dans quels sols, une culture de maïs manque-t-elle d'eau à Lomé ?
 Première approche simplifiée, réalisée en autodidacte. Les résultats sont à interpréter avec prudence (voir Limites).
 
 Résumé
+
 Le projet propose un bilan hydrique journalier du sol, sur dix ans (2015–2024), avec des données satellitaires NASA POWER et la méthode FAO-56 :
 1.	ET0 : Penman-Monteith FAO-56, codée à la main et validée contre le paquet R Evapotranspiration.
 2.	ETc : courbe de coefficient cultural (Kc) en quatre stades pour un maïs de cycle court (90 jours), semé le 1er avril ou le 1er septembre.
@@ -10,6 +11,7 @@ Le projet propose un bilan hydrique journalier du sol, sur dix ans (2015–2024)
 4.	Comparaison de trois sols (sableux, limono-sableux, argileux) et de deux scénarios (référence et prudent), avec des tests de sensibilité.
 
 Principaux résultats
+
 •	La petite saison (semis en septembre) est plus risquée que celle d'avril, et le sol sableux est le plus vulnérable : en septembre, il connaît du stress 8 années sur 10 en référence.
 •	Le sol joue un rôle de tampon : en septembre, 13,3 jours de stress en moyenne en sol sableux, 5,0 en limono-sableux, 3,3 en argileux (référence).
 •	Le moment du stress diffère : en fin de cycle en septembre, en mi-saison (floraison) en avril.
@@ -17,10 +19,12 @@ Principaux résultats
 
 
 Exécution
+
 Prérequis : R et les paquets suivants: 
     install.packages(c("nasapower", "dplyr", "ggplot2", "tidyr", "tibble", "Evapotranspiration"))
 
 Ordre	Script	Rôle	Principales sorties
+
 1.	1_DonneeNASA_ET0.R : Télécharge NASA POWER (connexion internet nécessaire), calcule l'ET0 et les fichiersmeteo_lome_ET0.rds, meteo_lome_ET0.csv, bilan_mensuel.csv, figure_bilan_mensuel.png, figure_ET0_2023.png
 2.	2_ETC.R	: Courbe Kc, ETc, bilan pluie − ETc sur le cycle	figure_courbe_Kc.png, etc_avril_2023.csv, etc_sept_2023.csv, figure_ETc_pluie_avril.png, figure_ETc_pluie_septembre.png, bilan_annuel.csv, figure_bilan_annuel.png
 3.	3_BILAN_SOL.R	: Réservoir de sol, 2 scénarios × 3 sols × 10 ans × 2 saisons, sensibilité	resultats_60.csv, comparaison.csv, comparaison_resume.csv, comparaison_ecart.csv, pires_cas.csv, sensibilite_resume.csv, stress_par_stade_moyen.csv, figure_heatmap.png, figure_comparaison_scenarios.png, figure_Dr_septembre_2023.png, figure_zoom_2015_sableux.png, figure_stress_par_stade.png
@@ -31,14 +35,20 @@ Ordre	Script	Rôle	Principales sorties
 Sans connexion internet : le fichier meteo_lome_ET0.rds est fourni, ce qui permet de relancer directement les scripts 2 et 3.
 
 Données
+
 •	Source : NASA POWER, données journalières, cellule de grille de Lomé (6,17 °N ; 1,23 °E), du 2015-01-01 au 2024-12-31 (3 653 jours, sans valeur manquante).
+
 •	Variables: T2M_MAX, T2M_MIN (°C), RH2M (%), WS2M (m/s à 2 m), ALLSKY_SFC_SW_DWN (rayonnement, MJ/m²/jour), PRECTOTCORR (pluie, mm/jour).
+
 •	Altitude : 23 m, valeur supposée pour Lomé.
+
 •	Remarque sur la pluie: moyenne de 1 264 mm/an (de 860 à 1 517 mm), probablement élevée pour Lomé , avec une valeur extrême de 174,7 mm en un jour en 2020, non vérifiée.
 
 Méthode
+
 ET0 (FAO-56) :
 ET0 = [0,408*Δ*(Rn − G) + γ*900/(T + 273)*u2*(es − ea)] / [Δ + γ*(1 + 0,34*u2)]
+
 Les termes intermédiaires (pression, γ, es, ea, Δ, rayonnement extraterrestre Ra, Rns, Rnl) suivent le chapitre 3 de FAO-56.
 ETc : ETc = Kc × ET0, avec une courbe Kc linéaire par morceaux (initial, développement, mi-saison, fin).
 
@@ -51,6 +61,7 @@ Dr(j) = Dr(j−1) - (P - ruissellement) - irrigation + ETc ajustée + drainage
 Indicateurs : nombre de jours de stress (Ks < 1) et ratio ETc réelle / ETc potentielle, par saison, sol, année et stade.
 
 Paramètres
+
 Kc initial / mi-saison / fin	0,30 / 1,20 / 0,35	FAO-56, tableau 12 (Kc de fin : récolte après séchage du grain au champ)
 Durée des stades	15 / 25 / 30 / 20 jours (cycle de 90 jours)	Hypothèse de travail pour un cycle court, proportions proches de FAO-56 (tableau 11) ; à adapter à une variété locale
 Fraction d'épuisement p	0,55	FAO-56, tableau 22 (maïs)
@@ -70,6 +81,7 @@ Validation
 •	Aucune validation sur des mesures d'humidité du sol ou de rendement.
 
 Limites
+
 •	La pluie NASA POWER (données de grille) n'a pas été comparée à des stations ; sa moyenne est probablement élevée pour Lomé, et la valeur extrême de 2020 n'est pas vérifiée.
 •	Les paramètres de sol sont génériques, pas ceux d'une terre de barre mesurée.
 •	Dates de semis fixes, cycle de 90 jours, Zr constant sur le cycle, ruissellement en fraction fixe, Kc standard non ajusté au climat local.
@@ -77,23 +89,28 @@ Limites
 •	Modèle très simplifié par rapport à un modèle de surface complet.
 
 Perspectives
-5.	Remplacer la pluie de grille par des données de station.
-6.	Estimer les propriétés hydriques des sols de la zone (terre de barre) à partir de la granulométrie, de la densité apparente et du carbone organique, par fonctions de pédotransfert.
-7.	Faire croître la profondeur racinaire avec le cycle.
-8.	Tester des scénarios climatiques simples et une règle d'irrigation.
-9.	Passer à un modèle de surface de type CLASSIC et à des sols forestiers, pour caractériser le stress hydrique passé et futur.
+
+1.	Remplacer la pluie de grille par des données de station.
+2.	Estimer les propriétés hydriques des sols de la zone (terre de barre) à partir de la granulométrie, de la densité apparente et du carbone organique.
+3.	Faire croître la profondeur racinaire avec le cycle.
+4.	Tester des scénarios climatiques simples et une règle d'irrigation.
+5.	Passer à un modèle de surface de type CLASSIC et à des sols forestiers.
 
 Usage de l'IA
+
 Le code R a été écrit en autodidacte, avec l'aide d'outils d'IA utilisés comme assistants (explications, débogage, relecture). Chaque étape du modèle peut être expliquée.
 
 Références
+
 •	Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop evapotranspiration — Guidelines for computing crop water requirements. FAO Irrigation and Drainage Paper 56. Rome : FAO.
 •	Doorenbos, J., Kassam, A.H. (1979). Yield response to water. FAO Irrigation and Drainage Paper 33. Rome : FAO.
 •	NASA Langley Research Center, POWER Project. Prediction Of Worldwide Energy Resources. https://power.larc.nasa.gov (données consultées en 2026).
 •	Paquets R (CRAN) : nasapower, Evapotranspiration, dplyr, ggplot2, tidyr, tibble.
 
 Licence
+
 Projet sous licence MIT.
 
 Contact
+
 SEPENOU Dégbey Adjété Emmanuel — adjetesepenou@gmail.com — https://github.com/adjetesepenou-git/Bilan_hydrique_lome_2015-2026.git
