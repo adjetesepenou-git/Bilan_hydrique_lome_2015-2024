@@ -1,6 +1,9 @@
+### Fichier à ne pas exécuter ###
+
+### Ce fichier stocke tous les fonctions indispensables pour les calculs
+### Il se charge automatiquement dans les autres fichiers 
 
 library(dplyr)
-
 
 ### FAO56 evapotranspiration potentiel
 
@@ -330,8 +333,6 @@ stress_par_stade <- function(df) {
       .groups = "drop"
     )
 }
-
-
 
 
 
